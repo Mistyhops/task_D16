@@ -1,0 +1,32 @@
+{% extends 'default.html' %}
+
+{% block title %}Создание объявления{% endblock title %}
+
+{% block content %}
+
+<h2>Создать объявление</h2>
+
+<form method="post">
+    {% csrf_token %}
+    {{ form.media }}
+    {{ form.header.label_tag }}{{ form.header }}
+    {{ form.category.label_tag }}{{ form.category }}
+    <br>
+    {{ form.text.label_tag }}{{ form.text }}
+    <br>
+    <input type="submit" value="Создать">
+</form>
+
+{% if messages %}
+<ul class="messages">
+    {% for message in messages %}
+    <p {% if message.tags %}
+            class="{{ message.tags }}"
+            {% endif %}>
+        {{ message }}
+    </p>
+    {% endfor %}
+</ul>
+{% endif %}
+
+{% endblock content %}

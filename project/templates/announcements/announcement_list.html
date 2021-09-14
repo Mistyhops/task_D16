@@ -1,0 +1,28 @@
+{% extends 'default.html' %}
+
+{% block title %}Объявления{% endblock title %}
+
+{% block content %}
+
+<h1>Объявления</h1>
+
+<table>
+    <tr>
+        <td>Дата</td>
+        <td>Автор</td>
+        <td>Заголовок</td>
+        <td>Категория</td>
+    </tr>
+    {% for announcement in announcements %}
+    <tr>
+        <td>{{ announcement.time|date:"d.m.Y H:i" }}</td>
+        <td>{{ announcement.author }}</td>
+        <td><a href="{% url 'announcement_detail' announcement.id %}">{{ announcement.header }}</a></td>
+        <td>{% for category in announcement.category.all %}{{ category }}{% endfor%}</td>
+    </tr>
+    {% endfor %}
+</table>
+
+<button><a href="{% url 'announcement_create' %}">Добавить объявление</a></button>
+
+{% endblock content %}

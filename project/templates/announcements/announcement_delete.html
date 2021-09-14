@@ -1,0 +1,35 @@
+{% extends 'default.html' %}
+
+{% block title %}Удалить объявление{% endblock title %}
+
+{% block content %}
+
+<h1>Вы уверены, что хотите удалить это объявление?</h1>
+<h1>{{ announcement.header }}</h1>
+<h5>{{ announcement.time|date:"d.m.Y H:i" }}</h5>
+<h5>Категории:
+    {% for category in announcement.category.all %}
+    {{ category }}
+    {% endfor %}
+</h5>
+
+<p>{{ announcement.text }}</p>
+
+<form method="post">
+    {% csrf_token %}
+    <input type="submit" value="Удалить">
+</form>
+
+{% if messages %}
+<ul class="messages">
+    {% for message in messages %}
+    <p {% if message.tags %}
+            class="{{ message.tags }}"
+            {% endif %}>
+        {{ message }}
+    </p>
+    {% endfor %}
+</ul>
+{% endif %}
+
+{% endblock content %}

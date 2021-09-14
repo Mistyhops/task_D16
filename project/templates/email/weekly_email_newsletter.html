@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+    <p>Здравствуйте, {{ username }}!</p>
+    <p>За неделю вышли следующие объявления:</p>
+    {% for announcement in announcement_list %}
+        <p><a href="http://127.0.0.1:8000/announcements/{{ announcement.id }}">{{ announcement.header }}</a></p>
+    {% endfor %}
+</body>
+</html>

@@ -1,0 +1,89 @@
+{% extends 'default.html' %}
+
+{% load custom_filters %}
+
+{% block title %}Профиль{% endblock title %}
+
+{% block content %}
+
+<h2>Профиль</h2>
+
+<h4 style="text-align: left">Отклики на ваши объявления</h4>
+
+<form method="get">
+    {{ filter.form }}
+    <input type="submit" value="Найти">
+</form>
+
+<a href="{% url 'profile' %}">Сбросить поиск</a>
+
+<table>
+    <tr>
+        <td>Дата</td>
+        <td>Объявление</td>
+        <td>Автор</td>
+        <td>Текст</td>
+        <td></td>
+    </tr>
+    {% for reply in replies %}
+    <tr>
+        <td>{{ reply.time|date:"d.m.Y H:i" }}</td>
+        <td><a href="{% url 'announcement_detail' reply.announcement.id %}">{{ reply.announcement }}</a></td>
+        <td>{{ reply.author }}</td>
+        <td>{{ reply.text }}</td>
+        <td>
+            {% if not reply.is_accepted %}
+            <a href="{% url 'accept_reply' reply.id %}">Принять</a>
+            {% else %}
+            <a href="{% url 'accept_reply' reply.id %}">Отклонить</a>
+            {% endif %}
+        </td>
+        <td>
+            <a href="{% url 'delete_reply' reply.id %}">Удалить</a>
+        </td>
+    </tr>
+    {% endfor %}
+</table>
+
+<br><br><br><br>
+
+
+{% if is_paginated %}
+
+    {% if page_obj.has_previous %}
+        <a href="?{% url_connect page=1 %}">В начало</a>
+        <a href="?{% url_connect page=page_obj.previous_page_number %}"><<<</a>
+    {% endif %}
+
+    {% for num in page_obj.paginator.page_range %}
+        {% if page_obj.paginator.num_pages != 1 %}
+            {% if page_obj.number == num %}
+                <a>{{ num }}</a>
+            {% elif num > page_obj.number|add:'-3' and num < page_obj.number|add:'3' %}
+                <a href="?{% url_connect page=num %}">{{ num }}</a>
+            {% endif %}
+        {% endif %}
+    {% endfor %}
+
+    {% if page_obj.has_next %}
+        <a href="?{% url_connect page=page_obj.next_page_number %}">>>></a>
+        <a href="?{% url_connect page=page_obj.paginator.num_pages %}">В конец</a>
+    {% endif %}
+
+{% endif %}
+
+<br>
+
+<button><a href="{% url 'logout' %}">Выйти</a></button>
+
+<p style="text-align: left">Мои подписки:</p>
+{% for category in subscribed_categories %}
+    {% if category.id in subscribers_list %}
+        <p style="text-align: left">
+            {{ category }}(<a href="{% url 'subscribe' category.id %}?from={{ request.path|urlencode }}">отписаться</a>)
+        </p>
+    {% endif %}
+{% endfor %}
+
+
+{% endblock content %}

@@ -1,0 +1,32 @@
+{% extends 'default.html' %}
+
+{% block title %}{{ announcement.header }}{% endblock title %}
+
+{% block content %}
+
+<h2>{{ announcement.header }}</h2>
+<h5>{{ announcement.time|date:"d.m.Y H:i" }}</h5>
+<h5>Категории:
+    {% for category in announcement.category.all %}
+        {{ category }}
+        {% if category.id in subscribers_list %}
+            <a href="{% url 'subscribe' category.id %}?from={{ request.path|urlencode }}">Отписаться</a>
+        {% else %}
+            <a href="{% url 'subscribe' category.id %}?from={{ request.path|urlencode }}">Подписаться</a>
+        {% endif %}
+    {% endfor %}
+</h5>
+
+<p>{{ announcement.text|safe }}</p>
+
+<a href="{% url 'announcement_edit' announcement.id %}">Редактировать</a>
+<a href="{% url 'announcement_delete' announcement.id %}">Удалить</a>
+
+<form method="post">
+    {% csrf_token %}
+    <label for="text">Напишите ваш отклик:</label>
+    <input name="text" type="text">
+    <input type="submit" value="Отправить">
+</form>
+
+{% endblock content %}

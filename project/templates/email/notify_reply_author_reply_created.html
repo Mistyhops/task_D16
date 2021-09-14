@@ -1,0 +1,13 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+    <p>Здравствуйте, {{ username }}!</p>
+    <p>Вы оставили отклик на объявление: <a href="http://127.0.0.1:8000/announcements/{{ announcement.id }}">{{ announcement.header }}</a></p>
+    <p>Текст отклика:</p>
+    <p>{{ reply.text }}</p>
+</body>
+</html>
